@@ -3,5 +3,5 @@ Based on the Python Pong Game with Pygame (https://github.com/educ8s/Python-Pong
 
 # instructions
 - just download and then run `pingpong.py`
-- have fun 
+- have ~~segg~~ fun 
 
