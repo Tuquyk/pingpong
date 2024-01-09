@@ -96,6 +96,7 @@ def text(text, font, color, surface, x, y):
 menu=True
 mode=1
 textmode=''
+click=False
 button=pygame.font.Font(None,40)
 while menu:
     for event in pygame.event.get():
@@ -110,16 +111,19 @@ while menu:
     pos= pygame.mouse.get_pos()
     if mode==1:
         textmode='MOUSE'
-    if mode==0:
+    elif mode==0:
         textmode='BUTTON'
     
     text('START', button, (255, 255, 255), screen, 80, 120)
     text(('MODE:' + textmode), button, (255, 255, 255), screen, 80, 220)
-    if pygame.mouse.get_pressed()[0] == 1:
+    if pygame.mouse.get_pressed()[0] == 1 and click==False:
         if button_1.collidepoint(pos):
             menu=False
         if button_2.collidepoint(pos):
             mode=1-mode
+            click=True
+    if pygame.mouse.get_pressed()[0] == 0:
+        click=False
     pygame.display.update()
     
 run=True
