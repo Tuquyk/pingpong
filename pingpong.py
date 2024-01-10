@@ -47,17 +47,28 @@ def animate_player():
 def animate_cpu():
     global cpu_speed
     cpu.y += cpu_speed
-
     if ball.centery <= cpu.centery:
-        cpu_speed = -7
+        cpu_speed = -abs(cpu_speed)
     if ball.centery >= cpu.centery:
-        cpu_speed = 7
+        cpu_speed = abs(cpu_speed)
 
     if cpu.top <= 0:
         cpu.top = 0
     if cpu.bottom >= screen_height:
         cpu.bottom = screen_height
-
+#text
+def text(text, font, color, surface, x, y):
+    textobj = font.render(text, 1, color)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x, y)
+    surface.blit(textobj, textrect)
+class button():
+    def __init__(self, x, y, width, height):
+        self.rectangle = pygame.Rect(x, y, width, height)
+    
+    def draw(self, r , g , b ):
+        pygame.draw.rect(screen, (r, g, b), self.rectangle)
+        
 pygame.init()
 
 screen_width = 800
@@ -78,52 +89,70 @@ player.midright = (screen_width, screen_height/2)
 
 ball_speed_x = 7
 ball_speed_y = 7
-player_speed = 0
-cpu_speed = 7
+player_speed = 7
+cpu_speed = 1
 
 cpu_points, player_points = 0, 0
 
 score_font = pygame.font.Font(None, 75)
 
 screen.fill((0,0,0))
-#text
-def text(text, font, color, surface, x, y):
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
+
 #main menu
+button_1=button(50, 100, 300, 50)
+button_2=button(50, 200, 300, 50)
+button_3=button(50, 300, 300, 50)
 menu=True
+
 mode=1
+difficulty=0
 textmode=''
+textdifficulty=''
+
 click=False
-button=pygame.font.Font(None,40)
+
+fbutton=pygame.font.Font(None,40)
 while menu:
+    screen.fill((0,0,0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    button_1 = pygame.Rect(50, 100, 250, 50)
-    button_2 = pygame.Rect(50, 200, 250, 50)
-    pygame.draw.rect(screen, (192, 192, 192), button_1)
-    pygame.draw.rect(screen, (192, 192, 192), button_2)
-    text('MAIN MENU', pygame.font.Font(None,75), (255, 255, 255), screen, 20, 20)
+    button_1.draw(192,192,192)
+    button_2.draw(192,192,192)
+    button_3.draw(192,192,192)
     pos= pygame.mouse.get_pos()
     if mode==1:
         textmode='MOUSE'
     elif mode==0:
         textmode='BUTTON'
-    
-    text('START', button, (255, 255, 255), screen, 80, 120)
-    text(('MODE:' + textmode), button, (255, 255, 255), screen, 80, 220)
+    if difficulty==0:
+        textdifficulty='EASY'
+    elif difficulty==1:
+        textdifficulty='MEDIUM'
+    elif difficulty==2:
+        textdifficulty='HARD'
+    elif difficulty==3:
+        textdifficulty='IMPOSSIBLE'
+    text('MAIN MENU', pygame.font.Font(None,75), (255, 255, 255), screen, 20, 20)
+    text('START', fbutton, (255, 255, 255), screen, 65, 120)
+    text(('MODE:' + textmode), fbutton, (255, 255, 255), screen, 65, 220)
+    text(('DIFFICULTY:' + textdifficulty), fbutton, (255, 255, 255), screen, 65, 320)
     if pygame.mouse.get_pressed()[0] == 1 and click==False:
-        if button_1.collidepoint(pos):
+        if button_1.rectangle.collidepoint(pos):
             menu=False
-        if button_2.collidepoint(pos):
+        elif button_2.rectangle.collidepoint(pos):
             mode=1-mode
+            click=True
+        elif button_3.rectangle.collidepoint(pos):
+            difficulty=difficulty+1
+            if difficulty==4:
+                difficulty=difficulty-4
+            cpu_speed = 7-((3-difficulty)*2)
             click=True
     if pygame.mouse.get_pressed()[0] == 0:
         click=False
+    
     pygame.display.update()
     
 run=True
@@ -140,9 +169,9 @@ while run:
         if mode==0:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    player_speed = -7
+                    player_speed = -abs(player_speed)
                 if event.key == pygame.K_DOWN:
-                    player_speed = 7
+                    player_speed = abs(player_speed)
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         player_speed = 0
