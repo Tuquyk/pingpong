@@ -77,7 +77,7 @@ pygame.init()
 
 screen_width = 800
 screen_height = 600
-collision=pygame.mixer.Sound("pygame/ping pong/resource/colli.wav") # add sound
+collision=pygame.mixer.Sound("resource/colli.wav") # add sound
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("pingpongchingchong") # it's just a joke ( I'm Asian ) 
 clock = pygame.time.Clock()
