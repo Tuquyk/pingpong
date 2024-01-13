@@ -71,6 +71,8 @@ class button():
         self.rectangle = pygame.Rect(x, y, width, height)
     
     def draw(self, r , g , b ):
+        pygame.draw.circle(screen,(r,g,b),(self.rectangle.x,self.rectangle.y+self.rectangle.height/2),self.rectangle.height/2)
+        pygame.draw.circle(screen,(r,g,b),(self.rectangle.x+self.rectangle.width,self.rectangle.y+self.rectangle.height/2),self.rectangle.height/2)
         pygame.draw.rect(screen, (r, g, b), self.rectangle)
         
 pygame.init()
@@ -188,7 +190,7 @@ quit=False
 #ping pong game
 while run:
     #Check if anyone win
-    if cpu_points==999 or player2_points==999 or player1_points==999:
+    if cpu_points==5 or player2_points==5 or player1_points==5:
         run=False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
