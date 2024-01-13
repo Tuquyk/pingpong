@@ -182,8 +182,6 @@ ball_speed_x = 7
 ball_speed_y = 7
 player2_speed = 7
 player1_speed =  7
-cpu_speed = 1
-
 
 run=True
 quit=False
