@@ -2,8 +2,7 @@ import pygame, sys, random
 
 def reset_ball():
     global ball_speed_x, ball_speed_y
-    ball.x = screen_width/2 - 10
-    ball.y = random.randint(10,100)
+    ball.center = (screen_width/2, screen_height/2)
     ball_speed_x *= random.choice([-1,1])
     ball_speed_y *= random.choice([-1,1])
 
@@ -108,6 +107,7 @@ textmode=''
 click=False
 
 fbutton=pygame.font.Font(None,40)
+cpu_speed=3
 while menu:
     screen.fill((0,0,0))
     for event in pygame.event.get():
