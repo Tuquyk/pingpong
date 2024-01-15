@@ -1,14 +1,20 @@
-import pygame, sys, random
+import pygame
+import sys
+import time
+import random
+
 
 def reset_ball():
-    global ball_speed_x, ball_speed_y
+    global ball_speed_x, ball_speed_y, time_start
     ball.center = (screen_width/2, screen_height/2)
+    time_start=time.time() 
+    
     ball_speed_x *= random.choice([-1,1])
     ball_speed_y *= random.choice([-1,1])
+    
 
 def point_won(winner):
     global cpu_points, player2_points , player1_points 
-
     if winner == "cpu":
         cpu_points += 1
     if winner == "player1":
@@ -20,9 +26,10 @@ def point_won(winner):
 
 def animate_ball():
     global ball_speed_x, ball_speed_y, mode
+    
     ball.x += ball_speed_x
     ball.y += ball_speed_y
-
+    
     if ball.bottom >= screen_height or ball.top <= 0:
         ball_speed_y *= -1
 
@@ -105,8 +112,8 @@ mode=0
 textmode=''
 
 click=False
-
 fbutton=pygame.font.Font(None,40)
+
 cpu_speed=3
 while menu:
     screen.fill((0,0,0))
@@ -183,6 +190,7 @@ ball_speed_y = 7
 player2_speed = 7
 player1_speed =  7
 
+time_start=0
 run=True
 quit=False
 #ping pong game
@@ -208,7 +216,8 @@ while run:
     if control==1:
         player2 = pygame.Rect((screen_width-20,pygame.mouse.get_pos()[1]),(20,100))
     #Change the positions of the game objects
-    animate_ball()
+    if(time.time()-time_start>0.5):
+        animate_ball()
     animate_player(player2, player2_speed)
     if mode==0:
         animate_cpu()
@@ -236,12 +245,13 @@ while run:
     pygame.draw.rect(screen,'white',player2)
     pygame.draw.circle(screen,(192,192,192), (screen_width/2, screen_height/2), 100)
     pygame.draw.ellipse(screen,'white',ball)
-
+    
     #Update the display
     pygame.display.update()
     clock.tick(60)
 #result
 if quit==False:
+    screen.fill((0,0,0))
     winner=''
     if mode==0:
         if(cpu_points > player2_points):
@@ -259,7 +269,7 @@ if quit==False:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 end = False
-        Truewinner = score_font.render(winner, True , (0,0,0))
+        Truewinner = score_font.render(winner, True , (192,192,192))
         screen.blit((Truewinner),(screen_width/2-300, screen_height/2))
         pygame.display.update()
 pygame.quit()
