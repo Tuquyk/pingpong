@@ -98,7 +98,7 @@ button_1=button(50, 100, 375, 50)
 button_2=button(50, 200, 375, 50)
 button_3=button(50, 300, 375, 50)
 button_4=button(50, 400, 375, 50)
-
+button_5=button(50, 500, 375, 50)
 #button
 menu=True
 
@@ -111,6 +111,8 @@ textdifficulty=''
 mode=0
 textmode=''
 
+screensize=0
+screensizemode='800 x 600'
 click=False
 fbutton=pygame.font.Font(None,40)
 
@@ -125,6 +127,7 @@ while menu:
     button_2.draw(192,192,192)
     button_3.draw(192,192,192)
     button_4.draw(192,192,192)
+    button_5.draw(192,192,192)
     pos= pygame.mouse.get_pos()
     # buttons status
     if control==1:
@@ -150,6 +153,7 @@ while menu:
     text(('Control:' + textcontrol), fbutton, (255, 255, 255), screen, 65, 220)
     text(('Difficulty:' + textdifficulty), fbutton, (255, 255, 255), screen, 65, 320)
     text(('Mode:' + textmode), fbutton, (255, 255, 255), screen, 65, 420)
+    text(('Screen size:' + screensizemode), fbutton, (255, 255, 255), screen, 65, 520)
     if pygame.mouse.get_pressed()[0] == 1 and click==False:
         if button_1.rectangle.collidepoint(pos):
             menu=False
@@ -160,10 +164,28 @@ while menu:
             difficulty=difficulty+1
             if difficulty==4:
                 difficulty=difficulty-4
-            cpu_speed = 7-((3-difficulty)*2)+2
+            cpu_speed = 7-((3-difficulty)*2)
             click=True
         elif button_4.rectangle.collidepoint(pos):
             mode=1-mode
+            click=True    
+        elif button_5.rectangle.collidepoint(pos):
+            screensize=screensize+1
+            if screensize==3:
+                screensize=screensize-3
+            if screensize==0:
+                screen_width=800
+                screen_height=600
+                screensizemode='800 x 600'
+            elif screensize==1:
+                screen_width=1280
+                screen_height=720
+                screensizemode='1280 x 720'
+            elif screensize==2:
+                screen_width=1366
+                screen_height=768
+                screensizemode='1366 x 768'
+            screen = pygame.display.set_mode((screen_width, screen_height))
             click=True    
     if pygame.mouse.get_pressed()[0] == 0:
         click=False
@@ -175,18 +197,18 @@ cpu_points, player2_points , player1_points  = 0, 0 , 0
 ball = pygame.Rect(0,0,30,30)
 ball.center = (screen_width/2, screen_height/2)
 
-cpu = pygame.Rect(0,0,20,100)
+cpu = pygame.Rect(0,0,20,100*((screensize+1)**(1/2)))
 cpu.centery = screen_height/2
 
-player1 = pygame.Rect(0,0,20,100)
+player1 = pygame.Rect(0,0,20,100*((screensize+1)**(1/2)))
 player1.centery = screen_height/2
 
-player2 = pygame.Rect(0,0,20,100)
+player2 = pygame.Rect(0,0,20,100*((screensize+1)**(1/2)))
 player2.midright = (screen_width, screen_height/2)
 
 
-ball_speed_x = 7
-ball_speed_y = 7
+ball_speed_x = 7+screensize
+ball_speed_y = 7+screensize
 player2_speed = 7
 player1_speed =  7
 
@@ -214,7 +236,7 @@ while run:
                     player2_speed = abs(player2_speed)
     #Make paddle parallel with mouse ( if mouse)
     if control==1:
-        player2 = pygame.Rect((screen_width-20,pygame.mouse.get_pos()[1]),(20,100))
+        player2 = pygame.Rect((screen_width-20,pygame.mouse.get_pos()[1]),(20,100*((screensize+1)**(1/2))))
     #Change the positions of the game objects
     if(time.time()-time_start>0.5):
         animate_ball()
@@ -223,8 +245,6 @@ while run:
         animate_cpu()
     if mode==1:
         animate_player(player1, player1_speed)
-    
-        
     #Clear the screen
     screen.fill((0,128,0))
 
@@ -243,7 +263,7 @@ while run:
     #Draw the game objects
     pygame.draw.aaline(screen,'white',(screen_width/2, 0), (screen_width/2, screen_height))
     pygame.draw.rect(screen,'white',player2)
-    pygame.draw.circle(screen,(192,192,192), (screen_width/2, screen_height/2), 100)
+    pygame.draw.circle(screen,(192,192,192), (screen_width/2, screen_height/2), screen_height/2-100)
     pygame.draw.ellipse(screen,'white',ball)
     
     #Update the display
