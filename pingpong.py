@@ -239,7 +239,7 @@ while run:
         player2 = pygame.Rect((screen_width-20,pygame.mouse.get_pos()[1]),(20,100*((screensize+1)**(1/2))))
     #Change the positions of the game objects
     while(time.time()-time_start<0.5):
-        nothing=0    
+        king_nothing=0    
     animate_ball()
     animate_player(player2, player2_speed)
     if mode==0:
